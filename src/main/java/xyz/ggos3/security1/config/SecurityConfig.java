@@ -17,6 +17,7 @@ public class SecurityConfig {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http.authorizeHttpRequests()
                 .requestMatchers("/user/**").authenticated()
                 .requestMatchers("/manager/**").hasRole("ADMIN, MANAGER")
@@ -24,7 +25,9 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/loginForm");
+                .loginPage("/loginForm")
+                .loginProcessingUrl("/login") // 주소가 호출되면 스프링 시큐리티가 낚아채 대신 로그인을 수행
+                .defaultSuccessUrl("/");
 
         return http.build();
     }
