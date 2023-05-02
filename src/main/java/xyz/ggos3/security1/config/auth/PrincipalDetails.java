@@ -6,45 +6,63 @@ package xyz.ggos3.security1.config.auth;
 // Authentication 안에 User 정보가 있어야함
 // User 오브젝트 => UserDetails 타입 객체
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import xyz.ggos3.security1.model.User;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 // Security => Authentication => UserDetails(PrincipalDetails)
+
+@RequiredArgsConstructor
 public class PrincipalDetails implements UserDetails {
+
+    private final User user;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Collection<GrantedAuthority> collection = new ArrayList<>();
+        collection.add(new GrantedAuthority() {
+            @Override
+            public String getAuthority() {
+                return user.getRole();
+            }
+        });
+
+        return collection;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return user.getUsername();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
+
+    // 계정의 활성화 여부 결정
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
