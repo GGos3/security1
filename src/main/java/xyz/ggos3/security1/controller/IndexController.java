@@ -2,10 +2,12 @@ package xyz.ggos3.security1.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import xyz.ggos3.security1.model.User;
 import xyz.ggos3.security1.repository.UserRepository;
 
@@ -22,11 +24,13 @@ public class IndexController {
         return "index";
     }
 
+    @ResponseBody
     @GetMapping("/admin")
     public String admin() {
         return "admin";
     }
 
+    @ResponseBody
     @GetMapping("/manager")
     public String manager() {
         return "manager";
@@ -54,5 +58,11 @@ public class IndexController {
         return "redirect:/loginForm";
     }
 
+    @Secured("ROLE_ADMIN")
+    @ResponseBody
+    @GetMapping("/info")
+    public String info() {
+        return "개인정보";
+    }
 }
 
